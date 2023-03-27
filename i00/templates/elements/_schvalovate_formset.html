@@ -1,0 +1,58 @@
+{% load django_bootstrap5 %}
+{% if schvalovatele_formset %}
+  <div class="card mb-3">
+    <div class="card-header text-bg-dark">
+      <i class="bi bi-person-check"></i>
+      Schvalovatelé
+    </div>
+    <div class="card-body">
+
+        {% with schvalovatele_formset as formset %}
+          {{ formset.management_form }}
+          <table class="table table-sm table-borderless formset-table">
+              <thead>
+                  {% for form in formset.forms %}
+                      {% if forloop.first %}
+                          {% for field in form.visible_fields %}
+                              <th scope="col"
+                                  class="{% if field.field.required %}required{% endif %} {% if field.help_text %}cursor-help{% endif %} col-{% cycle 6 6 %}"
+                                  {% if field.help_text %}title="{{ field.help_text|safe }}"{% endif %}>
+                                      <label>
+                                          {{ field.label|safe|lower }}
+                                          {% if field.help_text %}
+                                              <i class="bi bi-info-circle"></i>
+                                          {% endif %}
+                                      </label>
+                              </th>
+                          {% endfor %}
+                      {% endif %}
+                  {% endfor %}
+              </thead>
+              <tbody>
+                  {% for form in formset.forms %}
+                  <tr class="{{ form.css_classes }}">
+                      {% for field in form.visible_fields %}
+                          <td class="{{ field.css_classes }}">
+                              {% if forloop.first %}
+                                  {% bootstrap_form_errors form layout='inline' %}
+                                      {% for hidden in form.hidden_fields %}
+                                          {{ hidden }}
+                                      {% endfor %}
+                                  {% endif %}
+                                  {% bootstrap_field field show_label=False show_help=False wrapper_class='mb-0' %}
+                              </td>
+                          {% endfor %}
+                      </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+          {% bootstrap_formset_errors formset layout='inline' %}
+        {% endwith %}
+
+        <div class="alert alert-info mb-0" role="alert">
+            - seznam nabízených rolí schvalovatelů je editovatelný v <a href="{% url 'admin:echm_roleschvalovatele_changelist' %}" target="_blank">administraci</a><br/>
+            - role mohou být "aktivní", pak jsou přímo v nabídce rolí, nebo "neaktivní" a pak jsou volitelné v extra řádcích tohoto formuláře
+        </div>
+    </div>
+  </div><!-- card.end -->
+{% endif %}

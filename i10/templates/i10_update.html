@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load i18n static django_bootstrap5 %}
+
+{% block title %}
+  {{ block.super }} | {{ milnik.typ }} | {{ milnik.zmenovka.cislo }}
+{% endblock title %}
+
+{% block custom_css %}{% endblock %}
+
+{% block custom_js %}
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-sortablejs@latest/jquery-sortable.js"></script>
+  <script src="{% static 'i10/i10.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+  {% include 'elements/_milnik_title.html' %}
+  {% include 'elements/_planymilniku_btn_group.html' %}
+
+  <form action="." method="POST" enctype="multipart/form-data" id="form">
+    {% csrf_token %}
+
+    <div class="card mb-3">
+      <div class="card-header text-bg-dark">
+        <i class="bi bi-boxes"></i>
+        Rozsah změny na produkty
+      </div>
+      <div class="card-body">
+
+        {{ produkty_formset.management_form }}
+        <table class="table table-sm table-borderless formset-table" id="produkty_formset">
+            <thead>
+              <tr>
+                <th scope="col" class="col-2">
+                  <label>projekt</label>
+                  <a
+                      hx-get="{% url 'i10:hx_create_projekt' %}"
+                      hx-target="#dialog"
+                      title="vytvořit nový projekt">
+                        <i class="bi bi-plus-square"></i>
+                  </a>
+                </th>
+                <th scope="col" class="required pro-schvaleni col-2">
+                  <label>číslo</label>
+                </th>
+                <th scope="col" class="required pro-schvaleni col-2">
+                  <label>název</label>
+                </th>
+                <th scope="col" class="col-2">
+                  <label>poznámka</label>
+                </th>
+                <th scope="col" class="col-2">
+                  <label>zodpovědný</label>
+                </th>
+                <th scope="col" class="col-1">
+                  <label>tým</label>
+                </th>
+                <th scope="col" class="col-1">
+                  <label><i class="bi bi-trash"></i></label>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for form in produkty_formset.forms %}
+                <tr class="{{ form.css_classes }}">
+                    {% for field in form.visible_fields %}
+                        <td class="{{ field.css_classes }}">
+                            {% if forloop.first %}
+                              {% for hidden in form.hidden_fields %}
+                                  {{ hidden }}
+                              {% endfor %}
+                              {{ field }}
+                              {% comment %} {% bootstrap_field field show_label=False show_help=False wrapper_class='mb-0' %} {% endcomment %}
+                            {% else %}
+                              {% bootstrap_field field show_label=False show_help=False wrapper_class='mb-0' %}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% bootstrap_formset_errors produkty_formset layout='inline' %}
+
+        <div class="alert alert-info mb-1" role="alert">
+          - produkty bez vlastního schvalovatelského týmu automaticky podléhají týmu produktu s vlastním týmem nad ním<br/>
+          - prozatím je potřeba po přidání projektu stránku znovu obnovit<br/>
+          - projekty lze editovat v <a href="{% url 'admin:echm_zakaznik_changelist' %}" target="_blank">administraci</a><br/>
+        </div>
+        <div class="alert alert-warning mb-0" role="alert">
+          - jakou úlohu roli má v systému zodpovědný za produkt?<br/>
+        </div>
+      </div>
+    </div><!-- card.end -->
+
+    {{ form }}
+
+    {% include 'elements/_schvalovate_formset.html' %}
+
+    {% include 'elements/_submit_buttons.html' %}
+  </form>
+
+{% endblock content %}

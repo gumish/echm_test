@@ -1,0 +1,13 @@
+{% if schvalovatel.rozhodnuti == 'approved' %}
+    <span class="badge bg-success text-light p-2 ms-3" title="{{ schvalovatel.get_rozhodnuti_display }} - {{ schvalovatel.odpovezeno_kdy }}">
+        <i class="bi bi-check-lg"></i>
+    </span>
+{% elif schvalovatel.rozhodnuti == 'refused' %}
+    <span class="badge bg-danger text-light p-2 ms-3" title="{{ schvalovatel.get_rozhodnuti_display }} - {{ schvalovatel.odpovezeno_kdy }}">
+        <i class="bi bi-x-lg"></i>
+    </span>
+{% else %}
+    <span class="badge bg-light text-dark p-2 ms-3 border" title="{{ schvalovatel.get_rozhodnuti_display }} - {{ schvalovatel.odpovezeno_kdy }}">
+        <i class="bi bi-question-lg"></i>
+    </span>
+{% endif %}

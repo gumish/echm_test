@@ -1,0 +1,23 @@
+{
+    "search.exclude": {
+        "**/.venv": true,
+        "**/media": true,
+        "**/static/fileupload": true,
+        "**/static/images": true,
+        "**/static/jquery-ui": true,
+        "**/static/magnific": true,
+        "**/static/semantic-ui": true
+    },
+    "python.linting.pylintEnabled": true,
+    "python.testing.pytestEnabled": false,
+    "files.exclude": {
+        "**/_csv": true,
+        "**/.venv": true,
+        "**/.git": true,
+        "**/.svn": true
+    },
+    "python.linting.pylintArgs": [
+        "--load-plugins=pylint_django",
+        "--errors-only"
+    ],
+}

@@ -1,0 +1,9 @@
+<span class="me-2">
+    {% if clen.rozhodnuti == 'approved' %}
+        <i class="bi bi-check-circle-fill text-success"></i>
+    {% elif clen.rozhodnuti == 'refused' %}
+        <i class="bi bi-x-circle-fill text-danger"></i>
+    {% else %}
+        <i class="bi bi-question-circle-fill text-muted"></i>
+    {% endif %}
+</span>

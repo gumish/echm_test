@@ -1,0 +1,51 @@
+{% load custom_filters %}
+{% if je_editovatelny %}
+    <div
+        class="d-flex justify-content-end my-3"
+        {% if milnik %}
+        hx-get="{% url 'i00:hx_refresh_submit_buttons' milnik|ct_id milnik.id %}"
+        hx-trigger="refreshSubmitButtons from:body"
+        hx-swap="outerHTML swap:.5s"{% endif %}>
+
+        <span id="submit-buttons">
+            <span id="schvalitelnost" class="me-3">
+                {% if je_schvalitelny %}
+                    <button class="btn btn-success disabled">milník schvalitelný</button>
+                    <button class="btn btn-warning disabled" style="display:none;">milník nevyplněný</button>
+                {% else %}
+                    <button class="btn btn-warning disabled">milník nevyplněný</button>
+                    <button class="btn btn-success disabled" style="display:none;">milník schvalitelný</button>
+                {% endif %}
+            </span>
+
+            <button type="submit" class="btn btn-outline-secondary" title="pouze uložit formuláře" form="form">
+                <i class="bi bi-save"></i>
+                uložit
+            </button>
+
+            {% if milnik.plan_milniku.dalsi or not milnik.zmenovka %}
+                <button id="next-milnik-disabled" class="btn btn-outline-primary" {% if je_schvalitelny %}style="display: none;"{% endif %}
+                    title="tomuto milníku chybí potřebná data" disabled>
+                        nelze schválit
+                        <i class="bi bi-skip-forward-fill"></i>
+                </button>
+                <button id="next-milnik" type="submit" name="schvalit" value=1 class="btn btn-primary" form="form"
+                title="uložit, schválit a postoupit na další milník" {% if not je_schvalitelny %}style="display: none;"{% endif %}>
+                schválit milník
+                <i class="bi bi-skip-forward-fill"></i>
+            </button>
+            {% else %}
+                <button class="btn btn-primary" disabled>
+                    <i class="bi bi-sign-stop"></i>
+                    poslední milník
+                </button>
+            {% endif %}
+        </span>
+    </div>
+{% else %}
+    <div class="d-flex justify-content-end my-3">
+        <a href="#" class="btn btn-danger disabled" role="button">
+            Nejste zodpovědný (ChM) za tuto změnovku
+        </a>
+    </div>
+{% endif %}

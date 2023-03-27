@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}
+  {{ block.super }} | {{ milnik.typ }} | {{ milnik.zmenovka.cislo }}
+{% endblock title %}
+
+{% block custom_css %}{% endblock %}
+{% block custom_js %}{% endblock %}
+
+{% block content %}
+  {% include 'elements/_milnik_title.html' %}
+  {% include 'elements/_planymilniku_btn_group.html' %}
+
+    <div class="card mb-3">
+      <div class="card-header text-bg-dark">
+        <i class="bi bi-boxes"></i>
+        Rozsah změny na produkty
+      </div>
+      <div class="card-body">
+
+        <table class="table table-lg my-0">
+            <thead>
+              <tr>
+                <th scope="col">projekt</th>
+                <th scope="col">číslo</th>
+                <th scope="col">název</th>
+                <th scope="col">poznámka</th>
+                <th scope="col">zodpovědný</th>
+                <th scope="col">vlastní tým</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for produkt in milnik.produkty.all %}
+                    <tr {% if produkt.vlastni_tym %}class="table-primary"{% endif %}>
+                        <td>{{ produkt.projekt|default:'-' }}</td>
+                        <td>{{ produkt.cislo|default:'-' }}</td>
+                        <td>{{ produkt.nazev|default:'-' }}</td>
+                        <td>{{ produkt.poznamka|default:'-' }}</td>
+                        <td>{{ produkt.zodpovedny|default:'-' }}</td>
+                        <td>{{ produkt.vlastni_tym|yesno:'ano,' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+      </div>
+    </div><!-- card.end -->
+
+    {% include 'elements/_schvalovate_formset.html' %}
+
+
+{% endblock content %}

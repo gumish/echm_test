@@ -1,0 +1,13 @@
+<h1 class="d-flex justify-content-between">
+  <span>
+    {% if milnik.zmenovka %}
+      {{ milnik.zmenovka.cislo }} - {{ milnik.zmenovka.nazev }}
+    {% else %}
+      Nová změnovka
+    {% endif %}
+  </span>
+  <span>
+      {% if milnik.plan_milniku.splnen %}<i class="bi bi-check-circle-fill text-success"></i>{% endif %}
+      {{ milnik.plan_milniku.typ|default:'i00' }}
+  </span>
+</h1>

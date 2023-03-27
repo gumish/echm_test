@@ -1,0 +1,7 @@
+syntax: glob
+*.pyc
+media
+.venv
+git_sha.txt
+git_msg.txt
+~$*.*

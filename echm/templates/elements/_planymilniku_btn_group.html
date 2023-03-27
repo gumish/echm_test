@@ -1,0 +1,23 @@
+{% load custom_filters %}
+<div id="plany_milniku" class="btn-group d-flex mb-3" role="group">
+    {% for pm in milnik.zmenovka.plany_milniku.pouze_aktivni %}
+    <a
+        {% if pm.splnen or pm.predchozi.splnen %}
+            href="{% pm_url pm %}"
+        {% else %}
+            href="#"
+        {% endif %}
+        class="btn w-100 {% if pm.splnen %}btn-success{% else %}btn-light{% endif %} {% if pm == milnik.plan_milniku %}active{% endif %} {% if not pm.splnen and not pm.predchozi.splnen %}disabled{% endif %}">
+            <div class="title fw-bold">
+                {% if pm.splnen %}<i class="bi bi-check"></i>{% endif %}
+                {{ pm.typ }}<br/>
+                {{ pm.nazev }}
+            </div>
+            <div class="text-opacity-50">
+                <div><small title="plánované datum">{{ pm.planovane_datum|date:'SHORT_DATE_FORMAT'|default:'-' }}</small></div>
+                <div style="margin-top: -.6em"><small title="skutečné datum">{{ pm.skutecne_datum|date:'SHORT_DATE_FORMAT'|default:'-' }}</small></div>
+            </div>
+            {% if pm == milnik.plan_milniku %}<i class="bi bi-caret-up-fill"></i>{% endif %}
+    </a>
+    {% endfor %}
+</div>

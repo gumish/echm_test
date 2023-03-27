@@ -1,0 +1,97 @@
+{% load static i18n %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger p-0 no-print">
+
+  <div class="container">
+
+    <!-- BRAND -->
+    <a href="{% url 'zmenovka_list' %}" class="navbar-brand py-0" title="{% trans 'na úvodní stránku' %}">
+      <img src="{% static 'images/conti_logo_white.svg' %}" alt="conti logo" id="computer_logo" height="45">
+    </a>
+
+    <!-- TOGGLE BUTTON -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- COLLAPSE -->
+    <div class="collapse navbar-collapse" id="navbarColor02">
+
+      <!-- LEFT MENU -->
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a href="{% url 'zmenovka_list' %}" class="nav-link px-3 menu-new">
+              seznam změnovek
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'i00:create' %}" class="nav-link px-3 menu-new">
+              nová změnovka
+          </a>
+        </li>
+      </ul>
+
+      <!-- RIGHT MENU -->
+      <ul class="navbar-nav">
+
+        {% if user.is_active %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" aria-expanded="false" title="přihlášený uživatel">
+              {{ user.get_full_name|default:user }}
+            </a>
+            <div class="dropdown-menu">
+              <a href="{% url 'password_change' %}" class="dropdown-item">
+                <i class="bi bi-key-fill"></i>
+                {% trans 'upravit heslo' %}
+              </a>
+              <a href="{% url 'logout' %}?next={{request.path}}" class="dropdown-item">
+                <i class="bi bi-box-arrow-right"></i>
+                {% trans 'odhlásit se' %}
+              </a>
+
+              {% if user.is_staff %}
+                <div class="dropdown-divider"></div>
+                  {% if object %}
+                    <a href="{{ object }}" class="dropdown-item" title="editovat aktuální objekt v administraci">
+                  {% else %}
+                    <a href="/admin/" class="dropdown-item" title="administrace stránek">
+                  {% endif %}
+                      <i class="bi bi-gear-fill"></i>
+                      admin
+                    </a>
+                </div><!-- div.dropdown-menu -->
+              {% endif %}
+          </li><!-- li.nav-item.dropdown -->
+        {% else %}
+          <li class="nav-item">
+            <a href="{% url 'login' %}?next={{ request.path }}" class="nav-link" title="přihlásit registrovaného uživatele">
+              {% trans 'přihlásit se' %}
+            </a>
+          </li>
+        {% endif %}
+
+        <!-- JAZYKY -->
+        <li class="nav-item dropdown" id="languages" title="{% trans 'change language' %}">
+          <a class="nav-link" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-globe"></i>
+          </a>
+          <ul class="dropdown-menu">
+            {% get_available_languages as LANGUAGES %}
+            {% for lang in LANGUAGES %}
+              <li class="dropdown-item {% if lang.0 == LANGUAGE_CODE %}active{% endif %}">
+                <form action="{% url 'set_language' %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="language" value="{{ lang.0 }}" />
+                  <input id="lang_{{ lang.0 }}" type="image" src="{% static 'images/flags/' %}{{ lang.0 }}.png" alt="{{ lang.1 }}" />
+                </form>
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
+
+      </ul><!-- ul.right.menu -->
+
+    </div><!-- div.collapse -->
+
+  </div><!-- div.container -->
+
+</nav>

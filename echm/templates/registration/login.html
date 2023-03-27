@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+    {{ block.super }} | přihlášení
+{% endblock title %}
+
+{% block section %}section_login{% endblock section %}
+
+{% block custom_css %}{% endblock %}
+
+{% block custom_js %}
+    <script type="text/javascript" charset="utf-8">
+        $(function(){
+            $("#direct_access input.prompt").removeAttr('autofocus');
+            $("input[name=username]").focus();
+        });
+    </script>
+{% endblock %}
+
+
+{% block content %}
+    <div class="d-flex justify-content-center">
+        <div id="login" class="card">
+            <div class="card-body">
+                <h1 class="card-title text-center mb-3">{% trans 'Přihlášení' %}</h1><hr/>
+                <form action="." method="POST" id="login_form">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}">
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text fw-bold">{% trans 'uživatel' %}</span>
+                        <input type="text" name="username" placeholder="uid" class="form-control" aria-describedby="basic-addon1" autofocus required>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text fw-bold">{% trans 'heslo' %}</span>
+                        <input type="password" name="password"  class="form-control" aria-describedby="basic-addon2" required>
+                    </div>
+
+
+                    <div class="alert alert-info" role="alert">
+                        Přihlašujte se:
+                        <ul>
+                            <li>uživatel: uid***</li>
+                            <li>heslo: křestní jméno malými písmeny bez diakritiky</li>
+                        </ul>
+                    </div>
+
+                    <div class="form-group text-end">
+                        <input type="submit" value="přihlásit se" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger text-center mt-3" role="alert">
+            {{ form.non_field_errors.0 }}
+        </div>
+    {% endif %}
+{% endblock %}

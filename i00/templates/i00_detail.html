@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}
+  {{ block.super }} | i00 | {{ zmenovka.cislo }}
+{% endblock title %}
+
+{% block custom_css %}{% endblock %}
+{% block custom_js %}{% endblock %}
+
+{% block content %}
+  {% include 'elements/_milnik_title.html' %}
+  {% include 'elements/_planymilniku_btn_group.html' %}
+
+  {% with milnik as zmenovka %}
+
+      <div class="row">
+
+        <!-- prvni col -->
+        <div class="col-lg-7 mb-3">
+          <div class="card">
+            <div class="card-header text-bg-dark">
+              <i class="bi bi-arrow-repeat"></i>Změnovka
+            </div>
+            <div class="card-body">
+              <table class="table table-lg my-0">
+                <thead>
+                  <tr><th class="fw-bold">číslo</th><td>{{ zmenovka.cislo }}</td></tr>
+                </thead>
+                <tbody class="table-group-divider">
+                  <tr><td class="fw-bold">název</td><td>{{ zmenovka.nazev }}</td></tr>
+                  <tr><td class="fw-bold">popis</td><td>{{ zmenovka.popis }}</td></tr>
+                  <tr><td class="fw-bold">přínos</td><td>{{ zmenovka.prinos }}</td></tr>
+                  <tr><td class="fw-bold">žadatel</td><td>{{ zmenovka.zadatel }}</td></tr>
+                  <tr><td class="fw-bold">zodpovědný</td><td>{{ zmenovka.zodpovedny }}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div><!-- card.end -->
+        </div><!-- col.end -->
+
+        <!-- druhy col -->
+        <div class="col-lg-5">
+
+          <div class="card mb-3">
+            <div class="card-header text-bg-dark">
+              <i class="bi bi-signpost-2"></i>
+              Milníky
+            </div>
+            <div class="card-body">
+              <table class="table table-lg my-0">
+                <thead>
+                  <tr>
+                    <th>typ</th>
+                    <th>plánované datum</th>
+                    <th>skutečné datum</th>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                  {% for pm in zmenovka.plany_milniku.pouze_aktivni %}
+                    <tr>
+                      <td class="fw-bold">{{ pm.typ }}</td>
+                      <td>{{ pm.planovane_datum|default:'-' }}</td>
+                      <td>{{ pm.skutecne_datum|default:'-' }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div><!-- card.end -->
+
+          {% include 'elements/_schvalovate_formset.html' %}
+
+        </div><!-- col.end -->
+
+      </div><!-- row.end -->
+
+  {% endwith %}
+
+{% endblock content %}

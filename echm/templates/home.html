@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}
+    {{ block.super }} | úvod
+{% endblock title %}
+
+{% block section %}section_home{% endblock section %}
+
+{% block content %}
+
+    <h1>
+        {% trans 'Vítáme Vás v Electronic Change Managementu' %}
+        <span class="sub header">databáze změnovek</span>
+    </h1>
+
+    <h2>Aktuální schéma databáze</h2>
+    {% comment %} <img src="{% static 'images/schema.png' %}" alt="schema_databaze"> {% endcomment %}
+
+{% endblock content %}
+

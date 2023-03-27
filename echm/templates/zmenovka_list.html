@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}
+  {{ block.super }} | změnovky
+{% endblock title %}
+
+
+{% block content %}
+
+  <h1>Změnovky</h1>
+  <table class="table table-borderless table-striped">
+    <thead>
+      <tr>
+        <th>číslo</th>
+        <th>název</th>
+        <th>žadatel</th>
+        <th>zodpovědný</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for zmenovka in zmenovka_list %}
+        <tr {% if zmenovka.zodpovedny == request.user %}class="table-primary"{% endif %}>
+          <th>
+            {% if zmenovka.zodpovedny == request.user or user.is_superuser %}
+              <a href="{% url 'i00:update' zmenovka.cislo %}">
+                {{ zmenovka.cislo }}
+              </a>
+            {% else %}
+              <a href="{% url 'i00:detail' zmenovka.cislo %}">
+                {{ zmenovka.cislo }}
+              </a>
+            {% endif %}
+          </th>
+          <th>{{ zmenovka.nazev }}</th>
+          <td>{{ zmenovka.zadatel|default:'-' }}</td>
+          <td>{{ zmenovka.zodpovedny|default:'-' }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock content %}

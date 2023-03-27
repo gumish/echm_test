@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}
+  {{ block.super }} | i00 | {{ zmenovka.cislo|default:'nová' }}
+{% endblock title %}
+
+{% block custom_css %}{% endblock %}
+{% block custom_js %}{% endblock %}
+
+{% block content %}
+  {% include 'elements/_milnik_title.html' %}
+  {% include 'elements/_planymilniku_btn_group.html' %}
+
+  <django-formset endpoint="{{ request.path }}" csrf-token="{{ csrf_token }}">
+    <div class="row">
+
+      <!-- prvni col -->
+      <div class="col-lg-4 mb-3">
+        <div class="card">
+          <div class="card-header text-bg-dark">
+            <i class="bi bi-arrow-repeat"></i>Změnovka
+          </div>
+          <div class="card-body">
+            {{ form_collection_dict.zmenovka }}
+          </div>
+        </div><!-- card.end -->
+      </div><!-- col.end -->
+
+      <!-- druhy col -->
+      <div class="col-lg-8">
+
+        <div class="card mb-3">
+          <div class="card-header text-bg-dark">
+            <i class="bi bi-signpost-2"></i>
+            Milníky
+          </div>
+          <div class="card-body">
+            {{ form_collection_dict.plany_milniku }}
+          </div>
+        </div><!-- card.end -->
+
+        <div class="card mb-3">
+          <div class="card-header text-bg-dark">
+            <i class="bi bi-signpost-2"></i>
+            Schvalovatelé
+          </div>
+          <div class="card-body">
+            {{ form_collection_dict.schvalovatele }}
+          </div>
+        </div><!-- card.end -->
+
+        <button type="button" click="submit -> proceed !~ scrollToError" class="btn btn-primary">Odeslat</button>
+      </div><!-- col.end -->
+
+    </div><!-- row.end -->
+  </django-formset>
+
+{% endblock content %}
